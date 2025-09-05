@@ -1,0 +1,5 @@
+Batch_Name	Plate_Name	Well_Count	Images_per_site	Sites_per_well_Median	Sites_per_well_mad
+Batch_1_IPSC	BR00138696	96	6	30	0.000
+Batch_1_Neurons	BR00138695	96	6	30	0.000
+Batch_1_Neurons	BR00138700	96	6	30	0.000
+Batch_1_Neurons	BR00138701	96	6	30	0.000
