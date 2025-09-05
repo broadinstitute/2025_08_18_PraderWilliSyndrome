@@ -1,4 +1,4 @@
-# Image-based Profiling Template
+# Image-based Profiling for 2025_08_18_PraderWilliSyndrome
 
 This repository was derived from a [template repository](https://github.blog/2019-06-06-generate-new-repositories-with-repository-templates/) located at https://github.com/cytomining/profiling-template.
 The purpose of the repository is to weld together a versioned data processing pipeline with versioned processed output data for a single image-based profiling experiment.
@@ -73,15 +73,15 @@ git push
 
 **DELETE EVERYTHING ABOVE THIS LINE AND START WITH THE CONTENT BELOW**
 
-# [Project Name]
+# 2025_08_18_PraderWilliSyndrome
 
 ## Overview
 
-[Brief description of the experiment/dataset (2-3 sentences)]
+Morphological profiling of iPSCs and derived neurons at different stages of differentiation, carrying WT gene or deletion associated with Prader Willi syndrome.
 
 ## Project Information
 
-- **Start Date**: YYYY_MM_DD (of the first batch)
+- **Start Date**: 2025_08_18 (of the first batch)
 - **Related data repos**: [Links to related data repositories]
 - **Metadata Location**: [Link to external metadata tracking system, if applicable]
 - **Analysis Repo**: [Link to associated analysis repositories]
