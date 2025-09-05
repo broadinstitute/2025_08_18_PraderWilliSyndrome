@@ -1,0 +1,4 @@
+[core]
+    remote = s3storage
+['remote "s3storage"']
+    url = s3://imaging-platform-ssf/projects/2025_08_18_PraderWilliSyndrome/workspace/software/2025_08_18_PraderWilliSyndrome_DVC
