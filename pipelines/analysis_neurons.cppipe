@@ -1,0 +1,476 @@
+CellProfiler Pipeline: http://www.cellprofiler.org
+Version:5
+DateRevision:428
+GitHash:
+ModuleCount:30
+HasImagePlaneDetails:False
+
+LoadData:[module_num:1|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Input data file location:Elsewhere...|D:\load_data_csv\Batch_1\BR00138695
+    Name of the file:load_data_with_illum.csv
+    Load images based on this data?:Yes
+    Base image location:Default Input Folder|
+    Process just a range of rows?:No
+    Rows to process:1,100000
+    Group images by metadata?:Yes
+    Select metadata tags for grouping:Plate,Well,Site
+    Rescale intensities?:Yes
+
+CorrectIlluminationApply:[module_num:2|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array(b'', dtype='|S1')|enabled:True|wants_pause:False]
+    Select the input image:OrigDNA
+    Name the output image:DNA
+    Select the illumination function:IllumDNA
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigER
+    Name the output image:ER
+    Select the illumination function:IllumER
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigAGP
+    Name the output image:AGP
+    Select the illumination function:IllumAGP
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigMito
+    Name the output image:Mito
+    Select the illumination function:IllumMito
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigRNA
+    Name the output image:RNA
+    Select the illumination function:IllumRNA
+    Select how the illumination function is applied:Divide
+    Select the input image:OrigBrightfield
+    Name the output image:Brightfield
+    Select the illumination function:IllumBrightfield
+    Select how the illumination function is applied:Divide
+    Set output image values less than 0 equal to 0?:Yes
+    Set output image values greater than 1 equal to 1?:Yes
+
+IdentifyPrimaryObjects:[module_num:3|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:['', '1.2: 0.03']|batch_state:array(b'', dtype='|S1')|enabled:True|wants_pause:False]
+    Select the input image:DNA
+    Name the primary objects to be identified:Nuclei
+    Typical diameter of objects, in pixel units (Min,Max):10,60
+    Discard objects outside the diameter range?:Yes
+    Discard objects touching the border of the image?:Yes
+    Method to distinguish clumped objects:Intensity
+    Method to draw dividing lines between clumped objects:Intensity
+    Size of smoothing filter:1
+    Suppress local maxima that are closer than this minimum allowed distance:10
+    Speed up by using lower-resolution image to find local maxima?:No
+    Fill holes in identified objects?:Never
+    Automatically calculate size of smoothing filter for declumping?:No
+    Automatically calculate minimum allowed distance between local maxima?:No
+    Handling of objects if excessive number of objects identified:Continue
+    Maximum number of objects:500
+    Use advanced settings?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Minimum Cross-Entropy
+    Threshold smoothing scale:1.3488
+    Threshold correction factor:1
+    Lower and upper bounds on threshold:0.02,1
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Three classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Background
+    Size of adaptive window:10
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2
+    Thresholding method:Default
+
+ImageMath:[module_num:4|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Operation:None
+    Raise the power of the result by:0.01
+    Multiply the result by:1.0
+    Add to result:0.0
+    Set values less than 0 equal to 0?:Yes
+    Set values greater than 1 equal to 1?:Yes
+    Replace invalid values with 0?:Yes
+    Ignore the image masks?:No
+    Name the output image:AGPExponent
+    Image or measurement?:Image
+    Select the first image:AGP
+    Multiply the first image by:1.0
+    Measurement:
+    Image or measurement?:Image
+    Select the second image:
+    Multiply the second image by:1.0
+    Measurement:
+
+MeasureImageIntensity:[module_num:5|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:AGPExponent
+    Measure the intensity only from areas enclosed by objects?:No
+    Select input object sets:
+    Calculate custom percentiles:No
+    Specify percentiles to measure:10,90
+
+ImageMath:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Operation:Subtract
+    Raise the power of the result by:1.0
+    Multiply the result by:1.0
+    Add to result:0.0
+    Set values less than 0 equal to 0?:Yes
+    Set values greater than 1 equal to 1?:Yes
+    Replace invalid values with 0?:Yes
+    Ignore the image masks?:No
+    Name the output image:AGPBackSub
+    Image or measurement?:Image
+    Select the first image:AGPExponent
+    Multiply the first image by:1.0
+    Measurement:
+    Image or measurement?:Measurement
+    Select the second image:
+    Multiply the second image by:1.0
+    Measurement:Intensity_MinIntensity_AGPExponent
+
+EnhanceOrSuppressFeatures:[module_num:7|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:AGPBackSub
+    Name the output image:Enhanced_AGPBackSub
+    Select the operation:Enhance
+    Feature size:10
+    Feature type:Neurites
+    Range of hole sizes:1,10
+    Smoothing scale:4
+    Shear angle:0.0
+    Decay:0.95
+    Enhancement method:Tubeness
+    Speed and accuracy:Fast
+    Rescale result image:No
+
+ImageMath:[module_num:8|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Operation:None
+    Raise the power of the result by:0.7
+    Multiply the result by:1.0
+    Add to result:0.0
+    Set values less than 0 equal to 0?:Yes
+    Set values greater than 1 equal to 1?:Yes
+    Replace invalid values with 0?:Yes
+    Ignore the image masks?:No
+    Name the output image:Enhanced_AGPBacksub_Exponent
+    Image or measurement?:Image
+    Select the first image:Enhanced_AGPBackSub
+    Multiply the first image by:1.0
+    Measurement:
+    Image or measurement?:Image
+    Select the second image:None
+    Multiply the second image by:1.0
+    Measurement:
+
+ImageMath:[module_num:9|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Operation:Subtract
+    Raise the power of the result by:1.0
+    Multiply the result by:1.0
+    Add to result:0.0
+    Set values less than 0 equal to 0?:Yes
+    Set values greater than 1 equal to 1?:Yes
+    Replace invalid values with 0?:Yes
+    Ignore the image masks?:No
+    Name the output image:Soma
+    Image or measurement?:Image
+    Select the first image:AGPBackSub
+    Multiply the first image by:1.0
+    Measurement:
+    Image or measurement?:Image
+    Select the second image:Enhanced_AGPBacksub_Exponent
+    Multiply the second image by:1
+    Measurement:
+
+IdentifySecondaryObjects:[module_num:10|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:['need to improve this!!']|batch_state:array(b'', dtype='|S1')|enabled:True|wants_pause:False]
+    Select the input objects:Nuclei
+    Name the objects to be identified:CellBodies
+    Select the method to identify the secondary objects:Watershed - Gradient
+    Select the input image:Soma
+    Number of pixels by which to expand the primary objects:20
+    Regularization factor:0.001
+    Discard secondary objects touching the border of the image?:No
+    Discard the associated primary objects?:No
+    Name the new primary objects:FilteredNuclei
+    Fill holes in identified objects?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Otsu
+    Threshold smoothing scale:0
+    Threshold correction factor:1
+    Lower and upper bounds on threshold:0.0125,1
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Three classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:10
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2
+    Thresholding method:Default
+
+IdentifySecondaryObjects:[module_num:11|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input objects:CellBodies
+    Name the objects to be identified:Cells
+    Select the method to identify the secondary objects:Watershed - Gradient
+    Select the input image:Enhanced_AGPBackSub
+    Number of pixels by which to expand the primary objects:10
+    Regularization factor:0.05
+    Discard secondary objects touching the border of the image?:No
+    Discard the associated primary objects?:No
+    Name the new primary objects:FilteredNuclei
+    Fill holes in identified objects?:No
+    Threshold setting version:12
+    Threshold strategy:Adaptive
+    Thresholding method:Otsu
+    Threshold smoothing scale:3
+    Threshold correction factor:1
+    Lower and upper bounds on threshold:0,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Three classes
+    Log transform before thresholding?:Yes
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:100
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Otsu
+
+IdentifyTertiaryObjects:[module_num:12|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array(b'', dtype='|S1')|enabled:True|wants_pause:False]
+    Select the larger identified objects:Cells
+    Select the smaller identified objects:Nuclei
+    Name the tertiary objects to be identified:Cytoplasm
+    Shrink smaller object prior to subtraction?:Yes
+
+IdentifyTertiaryObjects:[module_num:13|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the larger identified objects:Cells
+    Select the smaller identified objects:CellBodies
+    Name the tertiary objects to be identified:Neurites
+    Shrink smaller object prior to subtraction?:Yes
+
+ConvertObjectsToImage:[module_num:14|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input objects:Cells
+    Name the output image:CellImage
+    Select the color format:Binary (black & white)
+    Select the colormap:Default
+
+MorphologicalSkeleton:[module_num:15|svn_version:'Unknown'|variable_revision_number:1|show_window:False|notes:['Skeletonize the CellBodiesPlusNeurites image']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:CellImage
+    Name the output image:CellImageSkel
+
+MeasureObjectSkeleton:[module_num:16|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:['Measure the skeletonized cell bodies and neurites']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:True]
+    Select the seed objects:Nuclei
+    Select the skeletonized image:CellImageSkel
+    Retain the branchpoint image?:No
+    Name the branchpoint image:BranchpointImage
+    Fill small holes?:Yes
+    Maximum hole size:10
+    Export the skeleton graph relationships?:No
+    Intensity image:None
+    File output directory:Default Output Folder|
+    Vertex file name:vertices.csv
+    Edge file name:edges.csv
+
+MeasureColocalization:[module_num:17|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array(b'', dtype='|S1')|enabled:True|wants_pause:False]
+    Select images to measure:AGP, DNA, ER, Mito, RNA
+    Set threshold as percentage of maximum intensity for the images:15.0
+    Select where to measure correlation:Within objects
+    Select objects to measure:Cells, Cytoplasm, Nuclei
+    Run all metrics?:Yes
+    Calculate correlation and slope metrics?:Yes
+    Calculate the Manders coefficients?:Yes
+    Calculate the Rank Weighted Colocalization coefficients?:Yes
+    Calculate the Overlap coefficients?:Yes
+    Calculate the Manders coefficients using Costes auto threshold?:Yes
+    Method for Costes thresholding:Faster
+
+MeasureGranularity:[module_num:18|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array(b'', dtype='|S1')|enabled:True|wants_pause:False]
+    Select images to measure:AGP, DNA, ER, Mito, RNA
+    Measure within objects?:Yes
+    Select objects to measure:Cells, Cytoplasm, Nuclei
+    Subsampling factor for granularity measurements:0.25
+    Subsampling factor for background reduction:0.25
+    Radius of structuring element:10
+    Range of the granular spectrum:16
+
+MeasureObjectIntensity:[module_num:19|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array(b'', dtype='|S1')|enabled:True|wants_pause:False]
+    Select images to measure:AGP, DNA, ER, Mito, RNA
+    Select objects to measure:Cells, Cytoplasm, Nuclei
+
+MeasureObjectNeighbors:[module_num:20|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array(b'', dtype='|S1')|enabled:True|wants_pause:False]
+    Select objects to measure:Cells
+    Select neighboring objects to measure:Cells
+    Method to determine neighbors:Within a specified distance
+    Neighbor distance:40
+    Consider objects discarded for touching image border?:Yes
+    Retain the image of objects colored by numbers of neighbors?:No
+    Name the output image:ObjectNeighborCount
+    Select colormap:Default
+    Retain the image of objects colored by percent of touching pixels?:No
+    Name the output image:PercentTouching
+    Select colormap:Default
+
+MeasureObjectNeighbors:[module_num:21|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select objects to measure:Cells
+    Select neighboring objects to measure:Cells
+    Method to determine neighbors:Within a specified distance
+    Neighbor distance:2
+    Consider objects discarded for touching image border?:Yes
+    Retain the image of objects colored by numbers of neighbors?:No
+    Name the output image:ObjectNeighborCount
+    Select colormap:Default
+    Retain the image of objects colored by percent of touching pixels?:No
+    Name the output image:PercentTouching
+    Select colormap:Default
+
+MeasureObjectNeighbors:[module_num:22|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array(b'', dtype='|S1')|enabled:True|wants_pause:False]
+    Select objects to measure:Nuclei
+    Select neighboring objects to measure:Nuclei
+    Method to determine neighbors:Within a specified distance
+    Neighbor distance:2
+    Consider objects discarded for touching image border?:Yes
+    Retain the image of objects colored by numbers of neighbors?:No
+    Name the output image:ObjectNeighborCount
+    Select colormap:Default
+    Retain the image of objects colored by percent of touching pixels?:No
+    Name the output image:PercentTouching
+    Select colormap:Default
+
+MeasureObjectNeighbors:[module_num:23|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array(b'', dtype='|S1')|enabled:True|wants_pause:False]
+    Select objects to measure:Cells
+    Select neighboring objects to measure:Cells
+    Method to determine neighbors:Adjacent
+    Neighbor distance:5
+    Consider objects discarded for touching image border?:Yes
+    Retain the image of objects colored by numbers of neighbors?:No
+    Name the output image:ObjectNeighborCount
+    Select colormap:Default
+    Retain the image of objects colored by percent of touching pixels?:No
+    Name the output image:PercentTouching
+    Select colormap:Default
+
+MeasureObjectIntensityDistribution:[module_num:24|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:AGP, DNA, ER, Mito, RNA
+    Hidden:3
+    Hidden:1
+    Hidden:0
+    Calculate intensity Zernikes?:None
+    Maximum zernike moment:9
+    Select objects to measure:Nuclei
+    Object to use as center?:These objects
+    Select objects to use as centers:None
+    Select objects to measure:Cytoplasm
+    Object to use as center?:These objects
+    Select objects to use as centers:None
+    Select objects to measure:Cells
+    Object to use as center?:These objects
+    Select objects to use as centers:None
+    Scale the bins?:Yes
+    Number of bins:4
+    Maximum radius:100
+
+MeasureObjectSizeShape:[module_num:25|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array(b'', dtype='|S1')|enabled:True|wants_pause:False]
+    Select object sets to measure:Cells, Cytoplasm, Nuclei
+    Calculate the Zernike features?:No
+    Calculate the advanced features?:No
+
+OverlayOutlines:[module_num:26|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Display outlines on a blank image?:Yes
+    Select image on which to display outlines:OrigAGP
+    Name the output image:NucleiOutlines
+    Outline display mode:Grayscale
+    Select method to determine brightness of outlines:Max of image
+    How to outline:Inner
+    Select outline color:#0000A0
+    Select objects to display:Nuclei
+
+OverlayOutlines:[module_num:27|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Display outlines on a blank image?:Yes
+    Select image on which to display outlines:CellImage
+    Name the output image:CellOutlines
+    Outline display mode:Grayscale
+    Select method to determine brightness of outlines:Max of image
+    How to outline:Inner
+    Select outline color:#0000A0
+    Select objects to display:Cells
+
+SaveImages:[module_num:28|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:NucleiOutlines
+    Select method for constructing file names:Single name
+    Select image name for file prefix:OrigDNA
+    Enter single file name:\g<Well>_s\g<Site>--nuclei-outlines
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_nuclei
+    Saved file format:png
+    Output file location:Default Output Folder|outlines
+    Image bit depth:8-bit integer
+    Overwrite existing files without warning?:Yes
+    When to save:Every cycle
+    Record the file and path information to the saved image?:Yes
+    Create subfolders in the output folder?:No
+    Base image folder:Default Input Folder
+    How to save the series:T (Time)
+    Save with lossless compression?:No
+
+SaveImages:[module_num:29|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:CellOutlines
+    Select method for constructing file names:Single name
+    Select image name for file prefix:OrigDNA
+    Enter single file name:\g<Well>_s\g<Site>--cell-outlines
+    Number of digits:4
+    Append a suffix to the image file name?:Yes
+    Text to append to the image name:_nuclei
+    Saved file format:png
+    Output file location:Default Output Folder|outlines
+    Image bit depth:8-bit integer
+    Overwrite existing files without warning?:Yes
+    When to save:Every cycle
+    Record the file and path information to the saved image?:Yes
+    Create subfolders in the output folder?:No
+    Base image folder:Default Input Folder
+    How to save the series:T (Time)
+    Save with lossless compression?:No
+
+ExportToSpreadsheet:[module_num:30|svn_version:'Unknown'|variable_revision_number:13|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the column delimiter:Comma (",")
+    Add image metadata columns to your object data file?:No
+    Add image file and folder names to your object data file?:No
+    Select the measurements to export:No
+    Calculate the per-image mean values for object measurements?:No
+    Calculate the per-image median values for object measurements?:No
+    Calculate the per-image standard deviation values for object measurements?:No
+    Output file location:Default Output Folder|
+    Create a GenePattern GCT file?:No
+    Select source of sample row name:Metadata
+    Select the image to use as the identifier:None
+    Select the metadata to use as the identifier:None
+    Export all measurement types?:No
+    Press button to select measurements:
+    Representation of Nan/Inf:NaN
+    Add a prefix to file names?:No
+    Filename prefix:MyExpt_
+    Overwrite existing files without warning?:Yes
+    Data to export:Image
+    Combine these object measurements with those of the previous object?:No
+    File name:DATA.csv
+    Use the object name for the file name?:Yes
+    Data to export:Experiment
+    Combine these object measurements with those of the previous object?:No
+    File name:DATA.csv
+    Use the object name for the file name?:Yes
+    Data to export:Cells
+    Combine these object measurements with those of the previous object?:No
+    File name:DATA.csv
+    Use the object name for the file name?:Yes
+    Data to export:Cytoplasm
+    Combine these object measurements with those of the previous object?:No
+    File name:DATA.csv
+    Use the object name for the file name?:Yes
+    Data to export:Nuclei
+    Combine these object measurements with those of the previous object?:No
+    File name:DATA.csv
+    Use the object name for the file name?:Yes
