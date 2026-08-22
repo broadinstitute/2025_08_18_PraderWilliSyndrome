@@ -1,1 +1,1 @@
-# Pipelines
+# Cellprofiler pipelines
